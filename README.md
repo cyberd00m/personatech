@@ -1,66 +1,38 @@
-# PersonaForge AI
-
-**Transform information into structured intelligence.**
+# PersonaTech AI
 
 A futuristic AI-powered intelligence analysis dashboard that allows users to visualize how information could be organized into structured profiles, reports, timelines, and relationship graphs.
 
-### Installation via Docker
 
-1. **Clone the repository:**
+## 📦 Installation
+
+1. Clone the repository:
 ```bash
-git clone https://github.com/cyberd00m/personatech
-cd personatech
+git clone github.com/cyberd00m/personatech.git
+cd frontend
 ```
 
-2. **Start the application:**
+2. # Start everything
 ```bash
 docker compose up -d --build
 ```
 
-3. **Access the application:**
-Open your browser and navigate to [http://localhost:2077](http://localhost:2077)
-
-**Note:** The frontend directory is included in the repository, so no additional setup is required.
-
-### Uninstallation via Docker
-
-To uninstall the application, simply remove the personatech folder:
-
+3. # Open the application
 ```bash
-cd ..
-rm -rf personatech
+Open [http://localhost:3000](http://localhost:2077) in your browser
 ```
 
-## 🛠️ Manual Installation
+## 🐳 Updating Docker
 
-If you prefer to run the application without Docker:
+When a new version of the repository is available, pull the latest changes and rebuild the Docker container from the repository root:
 
-1. **Clone the repository:**
 ```bash
-git clone <repository-url>
-cd personatech/frontend
+git pull && docker compose up -d --build
 ```
 
-2. **Install dependencies:**
+## 🐳 Uninstalling Docker
 ```bash
-npm install
+docker compose down -v && cd .. && rm -rf personatech
 ```
-
-3. **Run the development server:**
-```bash
-npm run dev
-
-## ✨ Features
-
-- **Landing Page**: Professional marketing homepage with hero section and features showcase
-- **Dashboard**: Command center with real-time stats, activity feed, and AI insights
-- **Case Management**: Create, filter, and manage intelligence cases
-- **Profile Builder**: Interactive form with live preview for building intelligence profiles
-- **AI Analysis**: Simulated AI-powered analysis with confidence scores and recommendations
-- **Relationship Graph**: Interactive network visualization using React Flow
-- **Timeline**: Chronological event tracking with filtering capabilities
-- **Maps**: Geographic visualization with location markers and analysis
-- **Reports**: Generate and preview intelligence reports with export functionality
 
 ## 🔮 Future Development
 
