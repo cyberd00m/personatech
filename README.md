@@ -4,13 +4,6 @@
 
 A futuristic AI-powered intelligence analysis dashboard that allows users to visualize how information could be organized into structured profiles, reports, timelines, and relationship graphs.
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- **Docker** (version 20.10 or higher)
-- **Docker Compose** (version 2.0 or higher)
-
 ### Installation via Docker
 
 1. **Clone the repository:**
@@ -21,7 +14,7 @@ cd personatech
 
 2. **Start the application:**
 ```bash
-docker-compose up --build
+docker compose up -d --build
 ```
 
 3. **Access the application:**
