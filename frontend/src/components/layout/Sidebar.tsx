@@ -13,7 +13,6 @@ import {
   Map, 
   FileBarChart, 
   Settings,
-  Brain,
   Menu,
   X
 } from 'lucide-react'
@@ -28,7 +27,6 @@ const navigation = [
   { name: 'Graph', href: '/graph', icon: Network },
   { name: 'Maps', href: '/maps', icon: Map },
   { name: 'Reports', href: '/reports', icon: FileBarChart },
-  { name: 'AI Analysis', href: '/ai-analysis', icon: Brain },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
 

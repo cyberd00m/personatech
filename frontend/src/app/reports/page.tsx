@@ -6,7 +6,7 @@ import { TopNav } from '@/components/layout/TopNav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { mockCases, mockProfiles, mockEvidence, type Case } from '@/data'
+import { mockCases, mockProfiles, type Case } from '@/data'
 import { 
   FileBarChart, 
   Download,
@@ -16,34 +16,92 @@ import {
   FileText,
   CheckCircle,
   Clock,
-  Plus
+  Loader2,
+  Sparkles
 } from 'lucide-react'
 
+type Report = {
+  id: string
+  title: string
+  caseId: string
+  caseName: string
+  createdAt: string
+  status: 'completed' | 'draft' | 'generating'
+  confidence: number
+  profiles: number
+  evidence: number
+  timelineEvents: number
+  executiveSummary: string
+  keyFindings: string[]
+  recommendations: string[]
+  usedAI: boolean
+}
+
+type GeneratedReportResponse = {
+  report: Pick<Report, 'executiveSummary' | 'keyFindings' | 'recommendations' | 'confidence'>
+  usedAI: boolean
+}
+
 export default function ReportsPage() {
-  const [reports, setReports] = useState<any[]>([])
-  const [selectedReport, setSelectedReport] = useState<any | null>(null)
+  const [reports, setReports] = useState<Report[]>([])
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null)
   const [isCaseDialogOpen, setIsCaseDialogOpen] = useState(false)
   const [selectedCase, setSelectedCase] = useState<Case | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generationError, setGenerationError] = useState('')
 
-  const generateReport = () => {
+  const generateReport = async () => {
     if (!selectedCase) return
-    
-    const newReport = {
-      id: Date.now().toString(),
-      title: `${selectedCase.name} - Intelligence Summary`,
-      caseId: selectedCase.id,
-      caseName: selectedCase.name,
-      createdAt: new Date().toISOString().split('T')[0],
-      status: 'completed',
-      confidence: Math.floor(Math.random() * 30) + 70,
-      profiles: selectedCase.profiles,
-      evidence: selectedCase.evidence,
-      timelineEvents: Math.floor(Math.random() * 10) + 1
+
+    setIsGenerating(true)
+    setGenerationError('')
+
+    try {
+      const apiKey = window.localStorage.getItem('personatech-ai-api-key') ?? ''
+      const provider = window.localStorage.getItem('personatech-ai-provider') ?? 'OpenAI'
+      const response = await fetch('/api/ai/generate-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          provider,
+          apiKey,
+          caseData: selectedCase,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Report generation failed')
+      }
+
+      const generated = await response.json() as GeneratedReportResponse
+      const newReport: Report = {
+        id: Date.now().toString(),
+        title: `${selectedCase.name} - Intelligence Summary`,
+        caseId: selectedCase.id,
+        caseName: selectedCase.name,
+        createdAt: new Date().toISOString().split('T')[0],
+        status: 'completed',
+        confidence: generated.report.confidence,
+        profiles: selectedCase.profiles,
+        evidence: selectedCase.evidence,
+        timelineEvents: Math.floor(Math.random() * 10) + 1,
+        executiveSummary: generated.report.executiveSummary,
+        keyFindings: generated.report.keyFindings,
+        recommendations: generated.report.recommendations,
+        usedAI: generated.usedAI,
+      }
+
+      setReports((currentReports) => [...currentReports, newReport])
+      setSelectedReport(newReport)
+      setIsCaseDialogOpen(false)
+      setSelectedCase(null)
+    } catch (error) {
+      setGenerationError(error instanceof Error ? error.message : 'Report generation failed')
+    } finally {
+      setIsGenerating(false)
     }
-    setReports([...reports, newReport])
-    setSelectedReport(newReport)
-    setIsCaseDialogOpen(false)
-    setSelectedCase(null)
   }
 
   const handleGenerateClick = () => {
@@ -74,7 +132,7 @@ export default function ReportsPage() {
                 <FileBarChart className="h-8 w-8 text-gray-500" />
               </div>
               <h3 className="text-lg font-medium text-white mb-2">No reports yet</h3>
-              <p className="text-gray-400">Click "Generate Report" to create your first intelligence report</p>
+              <p className="text-gray-400">Click &quot;Generate Report&quot; to create your first intelligence report</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -111,15 +169,23 @@ export default function ReportsPage() {
               <div className="space-y-6">
                 {/* Report Header */}
                 <div className="border-b border-purple-400/20 pb-4">
-                  <h2 className="text-2xl font-bold text-white mb-2">Brighton Research - Intelligence Summary</h2>
+                  <div className="mb-2 flex flex-wrap items-center gap-3">
+                    <h2 className="text-2xl font-bold text-white">{selectedReport.title}</h2>
+                    {selectedReport.usedAI && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2 py-1 text-xs text-cyan-300">
+                        <Sparkles className="h-3 w-3" />
+                        AI Generated
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-4 text-sm text-gray-400">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      Generated: March 20, 2024
+                      Generated: {new Date(selectedReport.createdAt).toLocaleDateString()}
                     </span>
                     <span className="flex items-center gap-1">
                       <FileBarChart className="h-4 w-4" />
-                      Case: Brighton Research
+                      Case: {selectedReport.caseName}
                     </span>
                   </div>
                 </div>
@@ -127,35 +193,19 @@ export default function ReportsPage() {
                 {/* Executive Summary */}
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Executive Summary</h3>
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    This intelligence report provides a comprehensive analysis of the Brighton Research case, 
-                    covering 3 identified profiles, 24 evidence items, and 5 significant timeline events. 
-                    The analysis reveals strong connections between subjects through shared interests in 
-                    alternative music and gaming communities, with regular attendance at local venues and 
-                    organizational memberships.
-                  </p>
+                  <p className="text-sm text-gray-300 leading-relaxed">{selectedReport.executiveSummary}</p>
                 </div>
 
                 {/* Key Findings */}
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Key Findings</h3>
                   <ul className="space-y-2">
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      Three primary subjects identified with high confidence (85% average)
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      Strong organizational connections through Anime Club membership
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
-                      Consistent geographic patterns in Brighton area
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <Clock className="h-4 w-4 text-yellow-400 mt-0.5 flex-shrink-0" />
-                      Additional financial information needed for complete analysis
-                    </li>
+                    {selectedReport.keyFindings.map((finding) => (
+                      <li key={finding} className="flex items-start gap-2 text-sm text-gray-300">
+                        <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                        {finding}
+                      </li>
+                    ))}
                   </ul>
                 </div>
 
@@ -163,10 +213,10 @@ export default function ReportsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Statistics</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <StatCard label="Profiles" value="3" icon={<User className="h-4 w-4" />} />
-                    <StatCard label="Evidence" value="24" icon={<FileText className="h-4 w-4" />} />
-                    <StatCard label="Timeline Events" value="5" icon={<Clock className="h-4 w-4" />} />
-                    <StatCard label="Confidence" value="85%" icon={<CheckCircle className="h-4 w-4" />} />
+                    <StatCard label="Profiles" value={selectedReport.profiles.toString()} icon={<User className="h-4 w-4" />} />
+                    <StatCard label="Evidence" value={selectedReport.evidence.toString()} icon={<FileText className="h-4 w-4" />} />
+                    <StatCard label="Timeline Events" value={selectedReport.timelineEvents.toString()} icon={<Clock className="h-4 w-4" />} />
+                    <StatCard label="Confidence" value={`${selectedReport.confidence}%`} icon={<CheckCircle className="h-4 w-4" />} />
                   </div>
                 </div>
 
@@ -218,18 +268,12 @@ export default function ReportsPage() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-3">Recommendations</h3>
                   <ul className="space-y-2">
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
-                      Continue monitoring social media activity for pattern development
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
-                      Investigate professional connections through LinkedIn analysis
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-gray-300">
-                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
-                      Expand geographic tracking to include weekend travel patterns
-                    </li>
+                    {selectedReport.recommendations.map((recommendation) => (
+                      <li key={recommendation} className="flex items-start gap-2 text-sm text-gray-300">
+                        <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
+                        {recommendation}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -286,12 +330,22 @@ export default function ReportsPage() {
                     </div>
                   ))
                 )}
+                {generationError && (
+                  <p className="rounded-md border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{generationError}</p>
+                )}
                 <Button 
                   onClick={generateReport} 
-                  disabled={!selectedCase}
+                  disabled={!selectedCase || isGenerating}
                   className="w-full glow-blue mt-4"
                 >
-                  Generate Report
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Generating with AI...
+                    </>
+                  ) : (
+                    'Generate Report'
+                  )}
                 </Button>
               </div>
             </DialogContent>
@@ -302,7 +356,7 @@ export default function ReportsPage() {
   )
 }
 
-function ReportCard({ report, onSelect, isSelected }: { report: any; onSelect: () => void; isSelected: boolean }) {
+function ReportCard({ report, onSelect, isSelected }: { report: Report; onSelect: () => void; isSelected: boolean }) {
   const statusColors: Record<string, string> = {
     completed: 'bg-green-500/20 text-green-400 border-green-500/30',
     draft: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',

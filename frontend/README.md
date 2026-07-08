@@ -1,12 +1,6 @@
-# PersonaForge AI
-
-**Transform information into structured intelligence.**
+# PersonaTech AI
 
 A futuristic AI-powered intelligence analysis dashboard that allows users to visualize how information could be organized into structured profiles, reports, timelines, and relationship graphs.
-
-## 🚀 Project Overview
-
-PersonaForge AI is a frontend-only prototype demonstrating a professional intelligence analysis platform with a cyberpunk-inspired UI. This is Phase 1 of development, focusing on creating a polished, interactive interface without backend integration.
 
 ## ✨ Features
 
@@ -20,24 +14,12 @@ PersonaForge AI is a frontend-only prototype demonstrating a professional intell
 - **Maps**: Geographic visualization with location markers and analysis
 - **Reports**: Generate and preview intelligence reports with export functionality
 
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 15
-- **React**: React 19
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS 4
-- **UI Components**: Custom components with ShadCN UI patterns
-- **Animations**: Framer Motion
-- **Graph Visualization**: React Flow
-- **Maps**: MapLibre GL
-- **State Management**: Zustand
-- **Icons**: Lucide React
 
 ## 📦 Installation
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone github.com/cyberd00m/personatech.git
 cd frontend
 ```
 
@@ -95,8 +77,6 @@ The application uses a cyberpunk-inspired design theme:
 - **Components**: Custom UI components with consistent styling
 
 ## 📝 Mock Data
-
-The application uses mock data stored in `/src/data/` for demonstration purposes. The data structure is designed to be easily replaceable with backend API calls in future phases.
 
 ## 🔮 Future Development
 
