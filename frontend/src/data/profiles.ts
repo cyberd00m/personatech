@@ -23,7 +23,7 @@ export interface Profile {
   location: string;
   interests: string[];
   occupation?: string;
-  usernames: string[];
+  socialMedia: string[];
   websites: string[];
   organizations: string[];
   jobExperiences: JobExperience[];

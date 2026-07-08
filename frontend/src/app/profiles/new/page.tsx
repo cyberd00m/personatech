@@ -5,7 +5,7 @@ import { TopNav } from '@/components/layout/TopNav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { User, MapPin, Briefcase, Building2, Plus, X, GraduationCap, Calendar, GraduationCap as GraduationIcon } from 'lucide-react'
+import { User, MapPin, Briefcase, Plus, X, GraduationCap as GraduationIcon } from 'lucide-react'
 import { useState } from 'react'
 import type { JobExperience, Education } from '@/data/profiles'
 
@@ -17,14 +17,14 @@ export default function NewProfilePage() {
     location: '',
     occupation: '',
     interests: '',
-    usernames: '',
+    socialMedia: '',
     websites: '',
     organizations: '',
     notes: ''
   })
 
   const [interestsList, setInterestsList] = useState<string[]>([])
-  const [usernamesList, setUsernamesList] = useState<string[]>([])
+  const [socialMediaList, setSocialMediaList] = useState<string[]>([])
   const [websitesList, setWebsitesList] = useState<string[]>([])
   const [organizationsList, setOrganizationsList] = useState<string[]>([])
   const [jobExperiences, setJobExperiences] = useState<JobExperience[]>([])
@@ -52,7 +52,7 @@ export default function NewProfilePage() {
     console.log('Profile data:', { 
       ...formData, 
       interests: interestsList, 
-      usernames: usernamesList, 
+      socialMedia: socialMediaList, 
       websites: websitesList, 
       organizations: organizationsList,
       jobExperiences,
@@ -180,19 +180,19 @@ export default function NewProfilePage() {
                       )}
                     </div>
 
-                    {/* Usernames */}
+                    {/* Social Media */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Usernames</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Social Media</label>
                       <div className="flex gap-2">
                         <Input
-                          value={formData.usernames}
-                          onChange={(e) => setFormData({ ...formData, usernames: e.target.value })}
-                          placeholder="@username"
+                          value={formData.socialMedia}
+                          onChange={(e) => setFormData({ ...formData, socialMedia: e.target.value })}
+                          placeholder="Platform and username or profile URL"
                           onKeyPress={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
-                              addToList(formData.usernames, usernamesList, setUsernamesList)
-                              setFormData({ ...formData, usernames: '' })
+                              addToList(formData.socialMedia, socialMediaList, setSocialMediaList)
+                              setFormData({ ...formData, socialMedia: '' })
                             }
                           }}
                         />
@@ -200,21 +200,21 @@ export default function NewProfilePage() {
                           type="button"
                           variant="outline"
                           onClick={() => {
-                            addToList(formData.usernames, usernamesList, setUsernamesList)
-                            setFormData({ ...formData, usernames: '' })
+                            addToList(formData.socialMedia, socialMediaList, setSocialMediaList)
+                            setFormData({ ...formData, socialMedia: '' })
                           }}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
-                      {usernamesList.length > 0 && (
+                      {socialMediaList.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
-                          {usernamesList.map((username, index) => (
+                          {socialMediaList.map((socialMedia, index) => (
                             <span key={index} className="flex items-center gap-1 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-sm">
-                              {username}
+                              {socialMedia}
                               <button
                                 type="button"
-                                onClick={() => removeFromList(index, usernamesList, setUsernamesList)}
+                                onClick={() => removeFromList(index, socialMediaList, setSocialMediaList)}
                                 className="hover:text-white"
                               >
                                 <X className="h-3 w-3" />
@@ -511,7 +511,7 @@ export default function NewProfilePage() {
                   location={formData.location || 'Location'}
                   occupation={formData.occupation}
                   interests={interestsList}
-                  usernames={usernamesList}
+                  socialMedia={socialMediaList}
                   websites={websitesList}
                   organizations={organizationsList}
                   jobExperiences={jobExperiences}
@@ -527,13 +527,13 @@ export default function NewProfilePage() {
   )
 }
 
-function ProfilePreview({ name, alias, location, occupation, interests, usernames, websites, organizations, jobExperiences, education, notes }: {
+function ProfilePreview({ name, alias, location, occupation, interests, socialMedia, websites, organizations, jobExperiences, education, notes }: {
   name: string
   alias?: string
   location: string
   occupation?: string
   interests: string[]
-  usernames: string[]
+  socialMedia: string[]
   websites: string[]
   organizations: string[]
   jobExperiences: JobExperience[]
@@ -579,13 +579,13 @@ function ProfilePreview({ name, alias, location, occupation, interests, username
           </div>
         )}
 
-        {usernames.length > 0 && (
+        {socialMedia.length > 0 && (
           <div>
-            <p className="text-sm text-gray-500 mb-2">Usernames</p>
+            <p className="text-sm text-gray-500 mb-2">Social Media</p>
             <div className="flex flex-wrap gap-2">
-              {usernames.map((username, index) => (
+              {socialMedia.map((item, index) => (
                 <span key={index} className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-sm">
-                  {username}
+                  {item}
                 </span>
               ))}
             </div>
