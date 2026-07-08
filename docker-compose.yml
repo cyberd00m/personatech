@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: personatech-frontend
     ports:
-      - "3000:3000"
+      - "2077:3000"
     environment:
       - NODE_ENV=production
     restart: unless-stopped
