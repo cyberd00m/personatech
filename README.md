@@ -20,24 +20,15 @@ docker compose up -d --build
 3. **Access the application:**
 Open your browser and navigate to [http://localhost:2077](http://localhost:2077)
 
-4. **Stop the application:**
+**Note:** The frontend directory is included in the repository, so no additional setup is required.
+
+### Uninstallation via Docker
+
+To uninstall the application, simply remove the personatech folder:
+
 ```bash
-docker-compose down
-```
-
-5. **Uninstall/Remove Docker containers and images:**
-```bash
-# Stop and remove containers
-docker-compose down
-
-# Remove volumes (if any)
-docker-compose down -v
-
-# Remove the built images
-docker rmi personatech-frontend
-
-# Or remove all unused Docker resources
-docker system prune -a
+cd ..
+rm -rf personatech
 ```
 
 ## 🛠️ Manual Installation
@@ -58,20 +49,6 @@ npm install
 3. **Run the development server:**
 ```bash
 npm run dev
-```
-
-4. **Open [http://localhost:2077](http://localhost:2077) in your browser**
-
-## 📁 Project Structure
-
-```
-personatech/
-├── docker-compose.yml    # Docker configuration
-└── frontend/             # Next.js frontend application
-    ├── src/              # Source code
-    ├── public/           # Static assets
-    └── package.json      # Dependencies
-```
 
 ## ✨ Features
 
@@ -84,30 +61,6 @@ personatech/
 - **Timeline**: Chronological event tracking with filtering capabilities
 - **Maps**: Geographic visualization with location markers and analysis
 - **Reports**: Generate and preview intelligence reports with export functionality
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 15
-- **React**: React 19
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS 4
-- **UI Components**: Custom components with ShadCN UI patterns
-- **Animations**: Framer Motion
-- **Graph Visualization**: React Flow
-- **Maps**: MapLibre GL
-- **State Management**: Zustand
-- **Icons**: Lucide React
-
-## 📖 Documentation
-
-For detailed information about the frontend application, including:
-- Complete feature descriptions
-- Project structure
-- Design system
-- Mock data structure
-- Future development plans
-
-See the [frontend README](./frontend/README.md)
 
 ## 🔮 Future Development
 

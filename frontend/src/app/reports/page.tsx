@@ -1,0 +1,372 @@
+'use client'
+
+import { useState } from 'react'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { TopNav } from '@/components/layout/TopNav'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { mockCases, mockProfiles, mockEvidence, type Case } from '@/data'
+import { 
+  FileBarChart, 
+  Download,
+  Eye,
+  Calendar,
+  User,
+  FileText,
+  CheckCircle,
+  Clock,
+  Plus
+} from 'lucide-react'
+
+export default function ReportsPage() {
+  const [reports, setReports] = useState<any[]>([])
+  const [selectedReport, setSelectedReport] = useState<any | null>(null)
+  const [isCaseDialogOpen, setIsCaseDialogOpen] = useState(false)
+  const [selectedCase, setSelectedCase] = useState<Case | null>(null)
+
+  const generateReport = () => {
+    if (!selectedCase) return
+    
+    const newReport = {
+      id: Date.now().toString(),
+      title: `${selectedCase.name} - Intelligence Summary`,
+      caseId: selectedCase.id,
+      caseName: selectedCase.name,
+      createdAt: new Date().toISOString().split('T')[0],
+      status: 'completed',
+      confidence: Math.floor(Math.random() * 30) + 70,
+      profiles: selectedCase.profiles,
+      evidence: selectedCase.evidence,
+      timelineEvents: Math.floor(Math.random() * 10) + 1
+    }
+    setReports([...reports, newReport])
+    setSelectedReport(newReport)
+    setIsCaseDialogOpen(false)
+    setSelectedCase(null)
+  }
+
+  const handleGenerateClick = () => {
+    setIsCaseDialogOpen(true)
+  }
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0f]">
+      <Sidebar />
+      <TopNav />
+      
+      <main className="lg:ml-64 pt-16 min-h-screen flex items-center justify-center p-4 lg:p-8">
+        <div className="w-full max-w-4xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Reports</h1>
+            <p className="text-gray-400 mb-4">Generate and export intelligence reports</p>
+            <Button variant="neon-blue" className="glow-blue" onClick={handleGenerateClick}>
+              <FileBarChart className="mr-2 h-4 w-4" />
+              Generate Report
+            </Button>
+          </div>
+
+          {/* Reports Grid */}
+          {reports.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800 mb-4">
+                <FileBarChart className="h-8 w-8 text-gray-500" />
+              </div>
+              <h3 className="text-lg font-medium text-white mb-2">No reports yet</h3>
+              <p className="text-gray-400">Click "Generate Report" to create your first intelligence report</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {reports.map((report) => (
+                <ReportCard 
+                  key={report.id} 
+                  report={report} 
+                  onSelect={() => setSelectedReport(report)}
+                  isSelected={selectedReport?.id === report.id}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Report Preview Section */}
+          {selectedReport && (
+            <Card variant="neon-purple" className="glow-purple">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-white">Report Preview</CardTitle>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    <Eye className="mr-2 h-4 w-4" />
+                    Full Preview
+                  </Button>
+                  <Button variant="neon-blue" size="sm" className="glow-blue">
+                    <Download className="mr-2 h-4 w-4" />
+                    Export PDF
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Report Header */}
+                <div className="border-b border-purple-400/20 pb-4">
+                  <h2 className="text-2xl font-bold text-white mb-2">Brighton Research - Intelligence Summary</h2>
+                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      Generated: March 20, 2024
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FileBarChart className="h-4 w-4" />
+                      Case: Brighton Research
+                    </span>
+                  </div>
+                </div>
+
+                {/* Executive Summary */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Executive Summary</h3>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    This intelligence report provides a comprehensive analysis of the Brighton Research case, 
+                    covering 3 identified profiles, 24 evidence items, and 5 significant timeline events. 
+                    The analysis reveals strong connections between subjects through shared interests in 
+                    alternative music and gaming communities, with regular attendance at local venues and 
+                    organizational memberships.
+                  </p>
+                </div>
+
+                {/* Key Findings */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Key Findings</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                      Three primary subjects identified with high confidence (85% average)
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                      Strong organizational connections through Anime Club membership
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
+                      Consistent geographic patterns in Brighton area
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <Clock className="h-4 w-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+                      Additional financial information needed for complete analysis
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Statistics */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Statistics</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <StatCard label="Profiles" value="3" icon={<User className="h-4 w-4" />} />
+                    <StatCard label="Evidence" value="24" icon={<FileText className="h-4 w-4" />} />
+                    <StatCard label="Timeline Events" value="5" icon={<Clock className="h-4 w-4" />} />
+                    <StatCard label="Confidence" value="85%" icon={<CheckCircle className="h-4 w-4" />} />
+                  </div>
+                </div>
+
+                {/* Profile Summary */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Profile Summary</h3>
+                  <div className="space-y-3">
+                    {mockProfiles.slice(0, 3).map((profile) => (
+                      <div key={profile.id} className="flex items-center gap-3 p-3 rounded-lg border border-purple-400/20 bg-purple-500/5">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center flex-shrink-0">
+                          <User className="h-5 w-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-white">{profile.name}</h4>
+                          <p className="text-sm text-gray-400">{profile.location}</p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-medium text-cyan-400">{profile.confidence}%</span>
+                          <p className="text-xs text-gray-500">confidence</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Timeline Summary */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Timeline Summary</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-cyan-400" />
+                      <span className="text-gray-400">Feb 15, 2024</span>
+                      <span className="text-white">Anime Convention Attendance</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-purple-400" />
+                      <span className="text-gray-400">Mar 1, 2024</span>
+                      <span className="text-white">Music Festival - Metal Night</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="h-2 w-2 rounded-full bg-green-400" />
+                      <span className="text-gray-400">Mar 10, 2024</span>
+                      <span className="text-white">New Location Added - Tech Hub</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recommendations */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-3">Recommendations</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
+                      Continue monitoring social media activity for pattern development
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
+                      Investigate professional connections through LinkedIn analysis
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-gray-300">
+                      <div className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0" />
+                      Expand geographic tracking to include weekend travel patterns
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          )}
+
+          {/* Case Selection Dialog */}
+          <Dialog open={isCaseDialogOpen} onOpenChange={setIsCaseDialogOpen}>
+            <DialogContent className="bg-gray-900 border-blue-500/30">
+              <DialogHeader>
+                <DialogTitle className="text-white">Select Case for Report</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 mt-4">
+                {mockCases.length === 0 ? (
+                  <p className="text-gray-400 text-center py-4">No cases available. Create a case first.</p>
+                ) : (
+                  mockCases.map((case_) => (
+                    <div
+                      key={case_.id}
+                      onClick={() => setSelectedCase(case_)}
+                      className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                        selectedCase?.id === case_.id
+                          ? 'border-cyan-400 bg-cyan-400/10'
+                          : 'border-blue-500/30 bg-gray-800/50 hover:border-cyan-400/50'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-medium text-white">{case_.name}</h4>
+                          <p className="text-sm text-gray-400 mt-1 line-clamp-2">{case_.description}</p>
+                        </div>
+                        <div className="text-right ml-4">
+                          <span className={`text-xs px-2 py-1 rounded-full border ${
+                            case_.status === 'active' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
+                            case_.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
+                            'bg-gray-500/20 text-gray-400 border-gray-500/30'
+                          }`}>
+                            {case_.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 mt-3 text-sm text-gray-400">
+                        <span>{case_.profiles} profiles</span>
+                        <span>{case_.evidence} evidence</span>
+                        <span className={`capitalize ${
+                          case_.priority === 'high' ? 'text-red-400' :
+                          case_.priority === 'medium' ? 'text-yellow-400' :
+                          'text-green-400'
+                        }`}>
+                          {case_.priority} priority
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
+                <Button 
+                  onClick={generateReport} 
+                  disabled={!selectedCase}
+                  className="w-full glow-blue mt-4"
+                >
+                  Generate Report
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+      </main>
+    </div>
+  )
+}
+
+function ReportCard({ report, onSelect, isSelected }: { report: any; onSelect: () => void; isSelected: boolean }) {
+  const statusColors: Record<string, string> = {
+    completed: 'bg-green-500/20 text-green-400 border-green-500/30',
+    draft: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    generating: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
+  }
+
+  return (
+    <Card 
+      className={`border-blue-500/30 bg-gray-900/50 hover:border-cyan-400/50 transition-colors cursor-pointer ${
+        isSelected ? 'border-cyan-400/50 ring-2 ring-cyan-400/30' : ''
+      }`}
+      onClick={onSelect}
+    >
+      <CardHeader>
+        <div className="flex items-start justify-between mb-2">
+          <CardTitle className="text-white text-base line-clamp-2">{report.title}</CardTitle>
+          <span className={`text-xs px-2 py-1 rounded-full border ${statusColors[report.status]} flex-shrink-0 ml-2`}>
+            {report.status}
+          </span>
+        </div>
+        <p className="text-sm text-gray-400">{report.caseName}</p>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="flex items-center gap-1 text-gray-400">
+              <User className="h-3 w-3" />
+              {report.profiles} profiles
+            </div>
+            <div className="flex items-center gap-1 text-gray-400">
+              <FileText className="h-3 w-3" />
+              {report.evidence} evidence
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-gray-500">{new Date(report.createdAt).toLocaleDateString()}</span>
+            <span className="text-sm font-medium text-cyan-400">{report.confidence}% confidence</span>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button variant="outline" size="sm" className="flex-1" onClick={(e) => { e.stopPropagation(); onSelect(); }}>
+              <Eye className="mr-1 h-3 w-3" />
+              Preview
+            </Button>
+            <Button variant="neon-blue" size="sm" className="flex-1 glow-blue">
+              <Download className="mr-1 h-3 w-3" />
+              Export
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function StatCard({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
+  return (
+    <div className="p-3 rounded-lg border border-purple-400/20 bg-purple-500/5">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-purple-400">{icon}</span>
+        <span className="text-xs text-gray-400">{label}</span>
+      </div>
+      <p className="text-lg font-bold text-white">{value}</p>
+    </div>
+  )
+}
