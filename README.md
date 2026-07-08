@@ -18,7 +18,7 @@ docker compose up -d --build
 
 3. # Open the application
 ```bash
-Open [http://localhost:3000](http://localhost:2077) in your browser
+Open http://localhost:2077 in your browser
 ```
 
 ## 🐳 Updating Docker
