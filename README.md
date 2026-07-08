@@ -32,6 +32,21 @@ Open your browser and navigate to [http://localhost:2077](http://localhost:2077)
 docker-compose down
 ```
 
+5. **Uninstall/Remove Docker containers and images:**
+```bash
+# Stop and remove containers
+docker-compose down
+
+# Remove volumes (if any)
+docker-compose down -v
+
+# Remove the built images
+docker rmi personatech-frontend
+
+# Or remove all unused Docker resources
+docker system prune -a
+```
+
 ## 🛠️ Manual Installation
 
 If you prefer to run the application without Docker:
