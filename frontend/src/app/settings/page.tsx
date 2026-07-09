@@ -40,7 +40,7 @@ export default function SettingsPage() {
       <Sidebar />
       <TopNav />
 
-      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
+      <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
         <div className="w-full max-w-5xl space-y-8">
           <div className="text-center">
             <div className="mb-2 flex items-center justify-center gap-2">

@@ -45,7 +45,7 @@ export default function MapsPage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
+      <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
         <div className="w-full max-w-6xl">
           {/* Header */}
           <div className="text-center mb-10">
