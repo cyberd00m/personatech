@@ -48,7 +48,7 @@ Planned features for future phases:
 
 ## 📄 License
 
-This project is part of PersonaForge AI development.
+This project is part of PersonaForge development.
 
 ## 🤝 Contributing
 
