@@ -79,7 +79,7 @@ export default function EvidencePage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
+      <main className="min-h-screen px-5 pb-8 pt-[17.5rem] lg:px-8 lg:pb-10 lg:pt-[17.5rem] lg:pl-64 flex justify-center items-center">
         <div className="w-full max-w-5xl">
           {/* Header */}
           <div className="text-center mb-10">
@@ -105,6 +105,7 @@ export default function EvidencePage() {
                       onChange={(e) => setNewEvidence({ ...newEvidence, title: e.target.value })}
                       placeholder="Enter evidence title"
                       className="mt-2"
+                      style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                     />
                   </div>
                   <div>
@@ -141,6 +142,7 @@ export default function EvidencePage() {
                       onChange={(e) => setNewEvidence({ ...newEvidence, source: e.target.value })}
                       placeholder="Enter source"
                       className="mt-2"
+                      style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                     />
                   </div>
                   <div>
@@ -151,6 +153,7 @@ export default function EvidencePage() {
                       onChange={(e) => setNewEvidence({ ...newEvidence, tags: e.target.value })}
                       placeholder="tag1, tag2, tag3"
                       className="mt-2"
+                      style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                     />
                   </div>
                   <Button onClick={handleCreateEvidence} className="w-full glow-blue mt-6">
@@ -170,6 +173,7 @@ export default function EvidencePage() {
                     placeholder="Search evidence..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                   />
                 </div>
                 <select

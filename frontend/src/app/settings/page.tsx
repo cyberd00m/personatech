@@ -40,7 +40,7 @@ export default function SettingsPage() {
       <Sidebar />
       <TopNav />
 
-      <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
+      <main className="min-h-screen px-5 pb-8 pt-[17.5rem] lg:px-8 lg:pb-10 lg:pt-[17.5rem] lg:pl-64 flex justify-center items-center">
         <div className="w-full max-w-5xl space-y-8">
           <div className="text-center">
             <div className="mb-2 flex items-center justify-center gap-2">
@@ -81,6 +81,7 @@ export default function SettingsPage() {
                     onChange={(event) => setApiKey(event.target.value)}
                     placeholder="Enter your AI API key"
                     autoComplete="off"
+                    style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                   />
                   <p className="mt-2 text-xs text-gray-500">Your key is stored locally in this browser.</p>
                 </div>

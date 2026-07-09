@@ -48,6 +48,7 @@ export function TopNav() {
           <Input
             placeholder="Search cases, profiles, evidence..."
             className="bg-gray-900/50 border-blue-500/30 text-white placeholder:text-gray-500"
+            style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
           />
         </div>
 

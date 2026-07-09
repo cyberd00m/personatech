@@ -81,7 +81,7 @@ export default function TimelinePage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
+      <main className="min-h-screen px-5 pb-8 pt-[17.5rem] lg:px-8 lg:pb-10 lg:pt-[17.5rem] lg:pl-64 flex justify-center items-center">
         <div className="w-full max-w-5xl">
           {/* Header */}
           <div className="text-center mb-10">
@@ -107,6 +107,7 @@ export default function TimelinePage() {
                       onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
                       placeholder="Enter event title"
                       className="mt-2"
+                      style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                     />
                   </div>
                   <div>
@@ -142,6 +143,7 @@ export default function TimelinePage() {
                       value={newEvent.date}
                       onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
                       className="mt-2"
+                      style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
                     />
                   </div>
                   <div>
