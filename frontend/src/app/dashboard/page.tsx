@@ -16,7 +16,6 @@ import {
   ArrowRight
 } from 'lucide-react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 
 export default function DashboardPage() {
   const totalCases = mockCases.length
@@ -38,30 +37,15 @@ export default function DashboardPage() {
       <TopNav />
       
       <main className="lg:ml-64 min-h-screen flex justify-center px-5 pb-8 pt-32 lg:px-8 lg:pb-10 lg:pt-32">
-        <motion.div 
-          className="w-full max-w-5xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="w-full max-w-5xl">
           {/* Header */}
-          <motion.div 
-            className="text-center mb-10"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
+          <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
             <p className="text-gray-400">Welcome back. Here's your intelligence overview.</p>
-          </motion.div>
+          </div>
 
           {/* Stats Row */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
             <StatCard
               title="Cases"
               value={totalCases}
@@ -90,15 +74,10 @@ export default function DashboardPage() {
               trend="+12"
               color="purple"
             />
-          </motion.div>
+          </div>
 
           {/* Main Content */}
-          <motion.div 
-            className="grid grid-cols-1 lg:grid-cols-2 gap-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Active Cases */}
             <Card className="border-blue-500/20 bg-gray-900/30 hover:border-cyan-400/30 transition-colors">
               <CardHeader className="pb-4" style={{ padding: '1.25rem 1.25rem 1rem' }}>
@@ -114,15 +93,8 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent style={{ padding: '0 1.25rem 1.25rem' }}>
                 <div className="space-y-3">
-                  {mockCases.filter((c: Case) => c.status === 'active').slice(0, 2).map((case_: Case, index: number) => (
-                    <motion.div
-                      key={case_.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                    >
-                      <CaseCard case={case_} />
-                    </motion.div>
+                  {mockCases.filter((c: Case) => c.status === 'active').slice(0, 2).map((case_: Case) => (
+                    <CaseCard key={case_.id} case={case_} />
                   ))}
                 </div>
               </CardContent>
@@ -135,28 +107,16 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent style={{ padding: '0 1.25rem 1.25rem' }}>
                 <div className="space-y-2">
-                  {recentActivity.slice(0, 4).map((activity, index: number) => (
-                    <motion.div
-                      key={activity.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                    >
-                      <ActivityItem activity={activity} />
-                    </motion.div>
+                  {recentActivity.slice(0, 4).map((activity) => (
+                    <ActivityItem key={activity.id} activity={activity} />
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
 
           {/* Quick Actions */}
-          <motion.div 
-            className="mt-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
+          <div className="mt-10">
             <Card className="border-blue-500/20 bg-gray-900/30 hover:border-cyan-400/30 transition-colors">
               <CardHeader className="pb-4" style={{ padding: '1.25rem 1.25rem 1rem' }}>
                 <CardTitle className="text-white text-lg">Quick Actions</CardTitle>
@@ -168,21 +128,14 @@ export default function DashboardPage() {
                     { icon: <User className="h-4 w-4" />, label: "Add Profile", href: "/profiles/new" },
                     { icon: <FileText className="h-4 w-4" />, label: "Add Evidence", href: "/evidence" },
                     { icon: <Clock className="h-4 w-4" />, label: "View Timeline", href: "/timeline" }
-                  ].map((action, index: number) => (
-                    <motion.div
-                      key={action.label}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                    >
-                      <QuickActionButton icon={action.icon} label={action.label} href={action.href} />
-                    </motion.div>
+                  ].map((action) => (
+                    <QuickActionButton key={action.label} icon={action.icon} label={action.label} href={action.href} />
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </main>
     </div>
   )

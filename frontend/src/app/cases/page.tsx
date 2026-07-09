@@ -14,7 +14,6 @@ import {
   User, 
   FileText, 
   Plus,
-  Search,
   Filter,
   AlertCircle
 } from 'lucide-react'
@@ -138,13 +137,11 @@ export default function CasesPage() {
           <Card className="border-blue-500/30 bg-gray-900/50 mb-8">
             <CardContent className="p-5" style={{ padding: '1.25rem' }}>
               <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <div className="flex-1">
                   <Input
                     placeholder="Search cases..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
                   />
                 </div>
                 <div className="flex gap-2">
