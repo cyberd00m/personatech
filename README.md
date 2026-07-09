@@ -1,4 +1,4 @@
-# PersonaTech AI
+# PersonaTech
 
 A futuristic AI-powered intelligence analysis dashboard that allows users to visualize how information could be organized into structured profiles, reports, timelines, and relationship graphs.
 
