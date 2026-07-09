@@ -9,6 +9,8 @@ import { User, MapPin, Briefcase, Plus, X, GraduationCap as GraduationIcon } fro
 import { useState } from 'react'
 import type { JobExperience, Education } from '@/data/profiles'
 
+const socialMediaPlatforms = ['Instagram', 'Facebook', 'X / Twitter', 'LinkedIn', 'TikTok', 'YouTube', 'Reddit', 'GitHub', 'Discord', 'Telegram', 'Other']
+
 export default function NewProfilePage() {
   const [formData, setFormData] = useState({
     name: '',
@@ -27,6 +29,7 @@ export default function NewProfilePage() {
   const [socialMediaList, setSocialMediaList] = useState<string[]>([])
   const [websitesList, setWebsitesList] = useState<string[]>([])
   const [organizationsList, setOrganizationsList] = useState<string[]>([])
+  const [selectedSocialMediaPlatform, setSelectedSocialMediaPlatform] = useState(socialMediaPlatforms[0])
   const [jobExperiences, setJobExperiences] = useState<JobExperience[]>([])
   const [education, setEducation] = useState<Education[]>([])
 
@@ -45,6 +48,15 @@ export default function NewProfilePage() {
 
   const removeFromList = (index: number, list: string[], setList: (list: string[]) => void) => {
     setList(list.filter((_, i) => i !== index))
+  }
+
+  const addSocialMedia = () => {
+    const value = formData.socialMedia.trim()
+
+    if (value) {
+      setSocialMediaList([...socialMediaList, `${selectedSocialMediaPlatform}: ${value}`])
+      setFormData({ ...formData, socialMedia: '' })
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -184,25 +196,32 @@ export default function NewProfilePage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Social Media</label>
                       <div className="flex gap-2">
+                        <select
+                          value={selectedSocialMediaPlatform}
+                          onChange={(e) => setSelectedSocialMediaPlatform(e.target.value)}
+                          className="w-36 rounded-md border border-blue-500/30 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+                        >
+                          {socialMediaPlatforms.map((platform) => (
+                            <option key={platform} value={platform} className="bg-gray-900 text-white">
+                              {platform}
+                            </option>
+                          ))}
+                        </select>
                         <Input
                           value={formData.socialMedia}
                           onChange={(e) => setFormData({ ...formData, socialMedia: e.target.value })}
-                          placeholder="Platform and username or profile URL"
+                          placeholder="Username, handle, or profile URL"
                           onKeyPress={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
-                              addToList(formData.socialMedia, socialMediaList, setSocialMediaList)
-                              setFormData({ ...formData, socialMedia: '' })
+                              addSocialMedia()
                             }
                           }}
                         />
                         <Button
                           type="button"
                           variant="outline"
-                          onClick={() => {
-                            addToList(formData.socialMedia, socialMediaList, setSocialMediaList)
-                            setFormData({ ...formData, socialMedia: '' })
-                          }}
+                          onClick={addSocialMedia}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
