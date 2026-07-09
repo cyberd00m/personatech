@@ -120,10 +120,10 @@ export default function GraphPage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 pt-16 min-h-screen flex items-center justify-center p-4 lg:p-8">
+      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
         <div className="w-full max-w-6xl">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-white mb-2">Relationship Graph</h1>
             <p className="text-gray-400 mb-4">Visualize connections between profiles, organizations, and events</p>
             <div className="flex gap-2 justify-center">

@@ -80,10 +80,10 @@ export default function EvidencePage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 pt-16 min-h-screen flex items-center justify-center p-4 lg:p-8">
-        <div className="w-full max-w-4xl">
+      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
+        <div className="w-full max-w-5xl">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-white mb-2">Evidence</h1>
             <p className="text-gray-400 mb-4">Organize and manage collected evidence</p>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -164,7 +164,7 @@ export default function EvidencePage() {
 
           {/* Filters */}
           <Card className="border-blue-500/30 bg-gray-900/50 mb-8">
-            <CardContent className="p-6">
+            <CardContent className="p-5" style={{ padding: '1.25rem' }}>
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />

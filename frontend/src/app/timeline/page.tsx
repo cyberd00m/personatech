@@ -81,10 +81,10 @@ export default function TimelinePage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 pt-16 min-h-screen flex items-center justify-center p-4 lg:p-8">
-        <div className="w-full max-w-4xl">
+      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
+        <div className="w-full max-w-5xl">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-white mb-2">Timeline</h1>
             <p className="text-gray-400 mb-4">Chronological event tracking and pattern analysis</p>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -167,7 +167,7 @@ export default function TimelinePage() {
 
           {/* Filters */}
           <Card className="border-blue-500/30 bg-gray-900/50 mb-6">
-            <CardContent className="p-6">
+            <CardContent className="p-5" style={{ padding: '1.25rem' }}>
               <div className="flex items-center gap-4">
                 <Filter className="h-4 w-4 text-gray-400" />
                 <select
@@ -238,7 +238,7 @@ function TimelineEventCard({ event, typeIcons, typeColors, typeLabels, isLast }:
 
       {/* Event Card */}
       <Card className="border-blue-500/30 bg-gray-900/50 hover:border-cyan-400/50 transition-colors">
-        <CardContent className="p-6">
+        <CardContent className="p-5" style={{ padding: '1.25rem' }}>
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg bg-gray-800 ${typeColors[event.type]}`}>

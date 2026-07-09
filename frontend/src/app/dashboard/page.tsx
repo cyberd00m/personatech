@@ -37,9 +37,9 @@ export default function DashboardPage() {
       <Sidebar />
       <TopNav />
       
-      <main className="lg:ml-64 pt-16 min-h-screen flex items-center justify-center p-4 lg:p-8">
+      <main className="lg:ml-64 pt-16 min-h-screen flex justify-center px-5 py-8 lg:px-8 lg:py-10">
         <motion.div 
-          className="w-full max-w-4xl"
+          className="w-full max-w-5xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -101,7 +101,7 @@ export default function DashboardPage() {
           >
             {/* Active Cases */}
             <Card className="border-blue-500/20 bg-gray-900/30 hover:border-cyan-400/30 transition-colors">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-4" style={{ padding: '1.25rem 1.25rem 1rem' }}>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white text-lg">Active Cases</CardTitle>
                   <Link href="/cases">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
                   </Link>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent style={{ padding: '0 1.25rem 1.25rem' }}>
                 <div className="space-y-3">
                   {mockCases.filter((c: Case) => c.status === 'active').slice(0, 2).map((case_: Case, index: number) => (
                     <motion.div
@@ -130,10 +130,10 @@ export default function DashboardPage() {
 
             {/* Recent Activity */}
             <Card className="border-blue-500/20 bg-gray-900/30 hover:border-cyan-400/30 transition-colors">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-4" style={{ padding: '1.25rem 1.25rem 1rem' }}>
                 <CardTitle className="text-white text-lg">Recent Activity</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent style={{ padding: '0 1.25rem 1.25rem' }}>
                 <div className="space-y-2">
                   {recentActivity.slice(0, 4).map((activity, index: number) => (
                     <motion.div
@@ -158,10 +158,10 @@ export default function DashboardPage() {
             transition={{ duration: 0.5, delay: 0.5 }}
           >
             <Card className="border-blue-500/20 bg-gray-900/30 hover:border-cyan-400/30 transition-colors">
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-4" style={{ padding: '1.25rem 1.25rem 1rem' }}>
                 <CardTitle className="text-white text-lg">Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent style={{ padding: '0 1.25rem 1.25rem' }}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[
                     { icon: <FolderKanban className="h-4 w-4" />, label: "New Case", href: "/cases" },
@@ -199,7 +199,7 @@ function StatCard({ title, value, icon, trend, color }: {
   
   return (
     <Card className={`border ${borderClass} bg-gray-900/20`}>
-      <CardContent className="p-4">
+      <CardContent className="p-4" style={{ padding: '1rem' }}>
         <div className="flex items-center justify-between mb-2">
           {icon}
           <span className="text-xs text-gray-500">{trend}</span>
@@ -225,7 +225,7 @@ function CaseCard({ case: case_ }: { case: Case }) {
   }
 
   return (
-    <div className="p-3 rounded-lg border border-blue-500/10 bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+    <div className="p-4 rounded-lg border border-blue-500/10 bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
       <div className="flex items-start justify-between mb-2">
         <h4 className="font-medium text-white text-sm">{case_.name}</h4>
         <span className={`text-xs px-2 py-0.5 rounded-full border ${statusColors[case_.status]}`}>
@@ -268,7 +268,7 @@ function ActivityItem({ activity }: { activity: any }) {
   }
 
   return (
-    <div className="flex items-start gap-2 p-2 rounded hover:bg-gray-900/20 transition-colors">
+    <div className="flex items-start gap-3 p-3 rounded hover:bg-gray-900/20 transition-colors">
       <div className={`mt-0.5 ${iconColors[activity.type as keyof typeof iconColors]}`}>
         {icons[activity.type as keyof typeof icons]}
       </div>
