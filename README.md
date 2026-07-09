@@ -7,7 +7,7 @@ A futuristic AI-powered intelligence analysis dashboard that allows users to vis
 
 ```bash
 git clone https://github.com/cyberd00m/personatech.git
-cd frontend
+cd personatech
 
 # Start everything
 docker compose up -d --build
