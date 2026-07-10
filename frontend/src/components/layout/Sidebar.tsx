@@ -7,14 +7,12 @@ import {
   LayoutDashboard, 
   FolderKanban, 
   User, 
-  FileText, 
-  Clock, 
-  Network, 
-  Map, 
   FileBarChart, 
   Settings,
   Menu,
-  X
+  X,
+  Search,
+  Shield
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -22,10 +20,8 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Cases', href: '/cases', icon: FolderKanban },
   { name: 'Profiles', href: '/profiles', icon: User },
-  { name: 'Evidence', href: '/evidence', icon: FileText },
-  { name: 'Timeline', href: '/timeline', icon: Clock },
-  { name: 'Graph', href: '/graph', icon: Network },
-  { name: 'Maps', href: '/maps', icon: Map },
+  { name: 'OSINT', href: '/osint', icon: Shield },
+  { name: 'Investigations', href: '/investigations', icon: Search },
   { name: 'Reports', href: '/reports', icon: FileBarChart },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]

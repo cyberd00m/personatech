@@ -5,7 +5,7 @@ import { TopNav } from '@/components/layout/TopNav'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { User, MapPin, Briefcase, Plus, X, GraduationCap as GraduationIcon } from 'lucide-react'
+import { User, MapPin, Briefcase, Plus, X, GraduationCap as GraduationIcon, Map, Clock, FileText, Network, Link as LinkIcon } from 'lucide-react'
 import { useState } from 'react'
 import type { JobExperience, Education } from '@/data/profiles'
 
@@ -35,6 +35,22 @@ export default function NewProfilePage() {
 
   const [currentJob, setCurrentJob] = useState<JobExperience>({ title: '', company: '', startDate: '', endDate: '', description: '' })
   const [currentEducation, setCurrentEducation] = useState<Education>({ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' })
+  
+  // Maps locations
+  const [locations, setLocations] = useState<{ id: string; name: string; lat: number; lng: number; description: string }[]>([])
+  const [currentLocation, setCurrentLocation] = useState({ name: '', lat: 0, lng: 0, description: '' })
+  
+  // Timeline events
+  const [timelineEvents, setTimelineEvents] = useState<{ id: string; title: string; date: string; description: string; type: string }[]>([])
+  const [currentEvent, setCurrentEvent] = useState({ title: '', date: '', description: '', type: 'general' })
+  
+  // Evidence items
+  const [evidence, setEvidence] = useState<{ id: string; title: string; type: string; source: string; description: string }[]>([])
+  const [currentEvidence, setCurrentEvidence] = useState({ title: '', type: 'document', source: '', description: '' })
+  
+  // Graph connections
+  const [connections, setConnections] = useState<{ id: string; targetId: string; targetType: string; relationship: string; strength: number }[]>([])
+  const [currentConnection, setCurrentConnection] = useState({ targetId: '', targetType: 'person', relationship: '', strength: 50 })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -68,7 +84,11 @@ export default function NewProfilePage() {
       websites: websitesList, 
       organizations: organizationsList,
       jobExperiences,
-      education
+      education,
+      locations,
+      timelineEvents,
+      evidence,
+      connections
     })
     // In a real app, this would save to the backend
   }
@@ -78,7 +98,7 @@ export default function NewProfilePage() {
       <Sidebar />
       <TopNav />
       
-      <main className="min-h-screen px-5 pb-8 pt-[17.5rem] lg:px-8 lg:pb-10 lg:pt-[17.5rem] lg:pl-64 flex justify-center items-center">
+      <main className="min-h-screen px-5 pb-8 pt-[17.5rem] lg:px-8 lg:pb-10 lg:pt-[17.5rem] lg:pl-64 flex justify-center items-start">
         <div className="w-full max-w-5xl">
           {/* Header */}
           <div className="text-center mb-10">
@@ -93,62 +113,77 @@ export default function NewProfilePage() {
                 <CardTitle className="text-white">Profile Information</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Name *</label>
-                      <Input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="Full name"
-                        required
-                      />
-                    </div>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Basic Information */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 tracking-wide">
+                      <User className="h-5 w-5 text-cyan-400" />
+                      Basic Information
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Name *</label>
+                        <Input
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          placeholder="Full name"
+                          required
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Alias</label>
-                      <Input
-                        name="alias"
-                        value={formData.alias}
-                        onChange={handleInputChange}
-                        placeholder="Known alias or username"
-                      />
-                    </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Alias</label>
+                        <Input
+                          name="alias"
+                          value={formData.alias}
+                          onChange={handleInputChange}
+                          placeholder="Known alias or username"
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Age Range</label>
-                      <Input
-                        name="ageRange"
-                        value={formData.ageRange}
-                        onChange={handleInputChange}
-                        placeholder="e.g., 25-30"
-                      />
-                    </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Age Range</label>
+                        <Input
+                          name="ageRange"
+                          value={formData.ageRange}
+                          onChange={handleInputChange}
+                          placeholder="e.g., 25-30"
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Location *</label>
-                      <Input
-                        name="location"
-                        value={formData.location}
-                        onChange={handleInputChange}
-                        placeholder="City, Country"
-                        required
-                      />
-                    </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Location *</label>
+                        <Input
+                          name="location"
+                          value={formData.location}
+                          onChange={handleInputChange}
+                          placeholder="City, Country"
+                          required
+                        />
+                      </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Occupation</label>
-                      <Input
-                        name="occupation"
-                        value={formData.occupation}
-                        onChange={handleInputChange}
-                        placeholder="Job title or profession"
-                      />
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Occupation</label>
+                        <Input
+                          name="occupation"
+                          value={formData.occupation}
+                          onChange={handleInputChange}
+                          placeholder="Job title or profession"
+                        />
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Contact & Social */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 tracking-wide">
+                      <MapPin className="h-5 w-5 text-purple-400" />
+                      Contact & Social
+                    </h3>
 
                     {/* Interests */}
-                    <div>
+                    <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-300 mb-2">Interests</label>
                       <div className="flex gap-2">
                         <Input
@@ -193,7 +228,7 @@ export default function NewProfilePage() {
                     </div>
 
                     {/* Social Media */}
-                    <div>
+                    <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-300 mb-2">Social Media</label>
                       <div className="flex gap-2">
                         <select
@@ -245,7 +280,7 @@ export default function NewProfilePage() {
                     </div>
 
                     {/* Websites */}
-                    <div>
+                    <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-300 mb-2">Websites</label>
                       <div className="flex gap-2">
                         <Input
@@ -334,9 +369,17 @@ export default function NewProfilePage() {
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  {/* Professional Background */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 tracking-wide">
+                      <Briefcase className="h-5 w-5 text-green-400" />
+                      Professional Background
+                    </h3>
 
                     {/* Job Experiences */}
-                    <div>
+                    <div className="mb-4">
                       <label className="block text-sm font-medium text-gray-300 mb-2">Job Experiences</label>
                       <div className="space-y-3 p-4 rounded-lg border border-blue-500/20 bg-gray-900/30">
                         <div className="grid grid-cols-2 gap-3">
@@ -492,7 +535,308 @@ export default function NewProfilePage() {
                         )}
                       </div>
                     </div>
+                  </div>
 
+                  {/* Intelligence Data */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 tracking-wide">
+                      <Network className="h-5 w-5 text-orange-400" />
+                      Intelligence Data
+                    </h3>
+
+                    {/* Map Locations */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <Map className="h-4 w-4" />
+                        Map Locations
+                      </label>
+                      <div className="space-y-3 p-4 rounded-lg border border-green-500/20 bg-gray-900/30">
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            placeholder="Location name"
+                            value={currentLocation.name}
+                            onChange={(e) => setCurrentLocation({ ...currentLocation, name: e.target.value })}
+                          />
+                          <Input
+                            placeholder="Coordinates (lat, lng)"
+                            value={currentLocation.lat && currentLocation.lng ? `${currentLocation.lat}, ${currentLocation.lng}` : ''}
+                            onChange={(e) => {
+                              const coords = e.target.value.split(',').map(c => parseFloat(c.trim()))
+                              if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
+                                setCurrentLocation({ ...currentLocation, lat: coords[0], lng: coords[1] })
+                              }
+                            }}
+                          />
+                        </div>
+                        <Input
+                          placeholder="Description"
+                          value={currentLocation.description}
+                          onChange={(e) => setCurrentLocation({ ...currentLocation, description: e.target.value })}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (currentLocation.name) {
+                              setLocations([...locations, { ...currentLocation, id: `loc-${Date.now()}` }])
+                              setCurrentLocation({ name: '', lat: 0, lng: 0, description: '' })
+                            }
+                          }}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Location
+                        </Button>
+                        {locations.length > 0 && (
+                          <div className="space-y-2 mt-3">
+                            {locations.map((loc) => (
+                              <div key={loc.id} className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-white">{loc.name}</p>
+                                  <p className="text-xs text-gray-400">{loc.lat}, {loc.lng}</p>
+                                  {loc.description && <p className="text-xs text-gray-500 mt-1">{loc.description}</p>}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setLocations(locations.filter(l => l.id !== loc.id))}
+                                  className="text-gray-400 hover:text-red-400"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Timeline Events */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        Timeline Events
+                      </label>
+                      <div className="space-y-3 p-4 rounded-lg border border-yellow-500/20 bg-gray-900/30">
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            placeholder="Event title"
+                            value={currentEvent.title}
+                            onChange={(e) => setCurrentEvent({ ...currentEvent, title: e.target.value })}
+                          />
+                          <Input
+                            type="date"
+                            value={currentEvent.date}
+                            onChange={(e) => setCurrentEvent({ ...currentEvent, date: e.target.value })}
+                          />
+                        </div>
+                        <select
+                          value={currentEvent.type}
+                          onChange={(e) => setCurrentEvent({ ...currentEvent, type: e.target.value })}
+                          className="w-full rounded-md border border-blue-500/30 bg-gray-900/50 px-3 py-2 text-sm text-white"
+                        >
+                          <option value="general">General</option>
+                          <option value="meeting">Meeting</option>
+                          <option value="travel">Travel</option>
+                          <option value="communication">Communication</option>
+                          <option value="incident">Incident</option>
+                          <option value="observation">Observation</option>
+                        </select>
+                        <Input
+                          placeholder="Description"
+                          value={currentEvent.description}
+                          onChange={(e) => setCurrentEvent({ ...currentEvent, description: e.target.value })}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (currentEvent.title && currentEvent.date) {
+                              setTimelineEvents([...timelineEvents, { ...currentEvent, id: `evt-${Date.now()}` }])
+                              setCurrentEvent({ title: '', date: '', description: '', type: 'general' })
+                            }
+                          }}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Event
+                        </Button>
+                        {timelineEvents.length > 0 && (
+                          <div className="space-y-2 mt-3">
+                            {timelineEvents.map((evt) => (
+                              <div key={evt.id} className="flex items-center justify-between p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-white">{evt.title}</p>
+                                  <p className="text-xs text-gray-400">{evt.date} • {evt.type}</p>
+                                  {evt.description && <p className="text-xs text-gray-500 mt-1">{evt.description}</p>}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setTimelineEvents(timelineEvents.filter(e => e.id !== evt.id))}
+                                  className="text-gray-400 hover:text-red-400"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Evidence */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
+                        Evidence
+                      </label>
+                      <div className="space-y-3 p-4 rounded-lg border border-red-500/20 bg-gray-900/30">
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            placeholder="Evidence title"
+                            value={currentEvidence.title}
+                            onChange={(e) => setCurrentEvidence({ ...currentEvidence, title: e.target.value })}
+                          />
+                          <select
+                            value={currentEvidence.type}
+                            onChange={(e) => setCurrentEvidence({ ...currentEvidence, type: e.target.value })}
+                            className="rounded-md border border-blue-500/30 bg-gray-900/50 px-3 py-2 text-sm text-white"
+                          >
+                            <option value="document">Document</option>
+                            <option value="image">Image</option>
+                            <option value="video">Video</option>
+                            <option value="audio">Audio</option>
+                            <option value="screenshot">Screenshot</option>
+                            <option value="log">Log File</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <Input
+                          placeholder="Source"
+                          value={currentEvidence.source}
+                          onChange={(e) => setCurrentEvidence({ ...currentEvidence, source: e.target.value })}
+                        />
+                        <Input
+                          placeholder="Description"
+                          value={currentEvidence.description}
+                          onChange={(e) => setCurrentEvidence({ ...currentEvidence, description: e.target.value })}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (currentEvidence.title) {
+                              setEvidence([...evidence, { ...currentEvidence, id: `evd-${Date.now()}` }])
+                              setCurrentEvidence({ title: '', type: 'document', source: '', description: '' })
+                            }
+                          }}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Evidence
+                        </Button>
+                        {evidence.length > 0 && (
+                          <div className="space-y-2 mt-3">
+                            {evidence.map((evd) => (
+                              <div key={evd.id} className="flex items-center justify-between p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-white">{evd.title}</p>
+                                  <p className="text-xs text-gray-400">{evd.type} • {evd.source}</p>
+                                  {evd.description && <p className="text-xs text-gray-500 mt-1">{evd.description}</p>}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setEvidence(evidence.filter(e => e.id !== evd.id))}
+                                  className="text-gray-400 hover:text-red-400"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Graph Connections */}
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <Network className="h-4 w-4" />
+                        Connections
+                      </label>
+                      <div className="space-y-3 p-4 rounded-lg border border-purple-500/20 bg-gray-900/30">
+                        <div className="grid grid-cols-2 gap-3">
+                          <Input
+                            placeholder="Target entity ID/name"
+                            value={currentConnection.targetId}
+                            onChange={(e) => setCurrentConnection({ ...currentConnection, targetId: e.target.value })}
+                          />
+                          <select
+                            value={currentConnection.targetType}
+                            onChange={(e) => setCurrentConnection({ ...currentConnection, targetType: e.target.value })}
+                            className="rounded-md border border-blue-500/30 bg-gray-900/50 px-3 py-2 text-sm text-white"
+                          >
+                            <option value="person">Person</option>
+                            <option value="organization">Organization</option>
+                            <option value="location">Location</option>
+                            <option value="event">Event</option>
+                            <option value="company">Company</option>
+                          </select>
+                        </div>
+                        <Input
+                          placeholder="Relationship type (e.g., friend, colleague)"
+                          value={currentConnection.relationship}
+                          onChange={(e) => setCurrentConnection({ ...currentConnection, relationship: e.target.value })}
+                        />
+                        <div>
+                          <label className="text-sm text-gray-400 mb-2 block">Connection strength: {currentConnection.strength}%</label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={currentConnection.strength}
+                            onChange={(e) => setCurrentConnection({ ...currentConnection, strength: parseInt(e.target.value) })}
+                            className="w-full"
+                          />
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (currentConnection.targetId && currentConnection.relationship) {
+                              setConnections([...connections, { ...currentConnection, id: `con-${Date.now()}` }])
+                              setCurrentConnection({ targetId: '', targetType: 'person', relationship: '', strength: 50 })
+                            }
+                          }}
+                        >
+                          <LinkIcon className="h-4 w-4 mr-2" />
+                          Add Connection
+                        </Button>
+                        {connections.length > 0 && (
+                          <div className="space-y-2 mt-3">
+                            {connections.map((con) => (
+                              <div key={con.id} className="flex items-center justify-between p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-white">{con.targetId}</p>
+                                  <p className="text-xs text-gray-400">{con.relationship} ({con.targetType}) • {con.strength}% strength</p>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setConnections(connections.filter(c => c.id !== con.id))}
+                                  className="text-gray-400 hover:text-red-400"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Notes */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2 tracking-wide">
+                      <FileText className="h-5 w-5 text-blue-400" />
+                      Additional Notes
+                    </h3>
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Notes</label>
                       <textarea
@@ -536,6 +880,10 @@ export default function NewProfilePage() {
                   jobExperiences={jobExperiences}
                   education={education}
                   notes={formData.notes}
+                  locations={locations}
+                  timelineEvents={timelineEvents}
+                  evidence={evidence}
+                  connections={connections}
                 />
               </CardContent>
             </Card>
@@ -546,7 +894,7 @@ export default function NewProfilePage() {
   )
 }
 
-function ProfilePreview({ name, alias, location, occupation, interests, socialMedia, websites, organizations, jobExperiences, education, notes }: {
+function ProfilePreview({ name, alias, location, occupation, interests, socialMedia, websites, organizations, jobExperiences, education, notes, locations, timelineEvents, evidence, connections }: {
   name: string
   alias?: string
   location: string
@@ -558,6 +906,10 @@ function ProfilePreview({ name, alias, location, occupation, interests, socialMe
   jobExperiences: JobExperience[]
   education: Education[]
   notes: string
+  locations: { id: string; name: string; lat: number; lng: number; description: string }[]
+  timelineEvents: { id: string; title: string; date: string; description: string; type: string }[]
+  evidence: { id: string; title: string; type: string; source: string; description: string }[]
+  connections: { id: string; targetId: string; targetType: string; relationship: string; strength: number }[]
 }) {
   return (
     <div className="space-y-6">
@@ -685,6 +1037,77 @@ function ProfilePreview({ name, alias, location, occupation, interests, socialMe
           <div>
             <p className="text-sm text-gray-500 mb-2">Notes</p>
             <p className="text-sm text-gray-400">{notes}</p>
+          </div>
+        )}
+
+        {locations.length > 0 && (
+          <div>
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <Map className="h-4 w-4" />
+              Map Locations
+            </p>
+            <div className="space-y-2">
+              {locations.map((loc) => (
+                <div key={loc.id} className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <p className="text-sm font-medium text-white">{loc.name}</p>
+                  <p className="text-xs text-gray-400">{loc.lat}, {loc.lng}</p>
+                  {loc.description && <p className="text-xs text-gray-500 mt-1">{loc.description}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {timelineEvents.length > 0 && (
+          <div>
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              Timeline Events
+            </p>
+            <div className="space-y-2">
+              {timelineEvents.map((evt) => (
+                <div key={evt.id} className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                  <p className="text-sm font-medium text-white">{evt.title}</p>
+                  <p className="text-xs text-gray-400">{evt.date} • {evt.type}</p>
+                  {evt.description && <p className="text-xs text-gray-500 mt-1">{evt.description}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {evidence.length > 0 && (
+          <div>
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Evidence
+            </p>
+            <div className="space-y-2">
+              {evidence.map((evd) => (
+                <div key={evd.id} className="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <p className="text-sm font-medium text-white">{evd.title}</p>
+                  <p className="text-xs text-gray-400">{evd.type} • {evd.source}</p>
+                  {evd.description && <p className="text-xs text-gray-500 mt-1">{evd.description}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {connections.length > 0 && (
+          <div>
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <Network className="h-4 w-4" />
+              Connections
+            </p>
+            <div className="space-y-2">
+              {connections.map((con) => (
+                <div key={con.id} className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <p className="text-sm font-medium text-white">{con.targetId}</p>
+                  <p className="text-xs text-gray-400">{con.relationship} ({con.targetType}) • {con.strength}% strength</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

@@ -47,13 +47,12 @@ export default function ProfilesPage() {
           </div>
 
           {/* Search */}
-          <div className="mb-8">
-            <div className="max-w-md">
+          <div className="mb-8 text-center">
+            <div className="max-w-md mx-auto">
               <Input
                 placeholder="Search profiles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ marginLeft: '1rem', paddingLeft: '1.5rem' }}
               />
             </div>
           </div>
